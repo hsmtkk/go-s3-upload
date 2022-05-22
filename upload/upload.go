@@ -32,10 +32,12 @@ func (u *uploaderImpl) Upload(name string) (string, error) {
 		return "", fmt.Errorf("failed to open file; %s; %w", filePath, err)
 	}
 	defer f.Close()
+	gracier := "GLACIER"
 	result, err := u.uploader.Upload(&s3manager.UploadInput{
-		Bucket: &u.bucket,
-		Key:    &name,
-		Body:   f,
+		Bucket:       &u.bucket,
+		Key:          &name,
+		Body:         f,
+		StorageClass: &gracier,
 	})
 	if err != nil {
 		return "", fmt.Errorf("failed to upload object; %w", err)
